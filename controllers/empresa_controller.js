@@ -1,6 +1,6 @@
 const mysql = require("../msql").pool;
 
-//retorna todos os produtos da tabela empresas
+//retorna empresas
 exports.getEmpresas = (req,res,next)=> {
     mysql.getConnection((error,conn)=> {
         if(error){return res.status(500).send({ error:error})}
@@ -17,7 +17,7 @@ exports.getEmpresas = (req,res,next)=> {
                             empresas: prod.nome, 
                             request:{
                                 tipo: 'GET',
-                                descricao:'retorna id do produto',
+                                descricao:'retorna id da empresa',
                                 url:'http://localhost:3003/empresas/'+ prod.id
                             }                     
                         }
@@ -40,7 +40,7 @@ exports.getEmpresasID = (req,res,next)=> {
                 if(error){return res.status(500).send({ error:error})}
                 if (result.length == 0) {
                     return res.status(404).send({
-                        message: 'Não foi encontrado produto com este ID'
+                        message: 'Não foi encontrado empresa com este ID'
                     })
                 }
                 const response = {
@@ -70,7 +70,7 @@ exports.getInsertEmpresas = (req,res,next)=> {
                 conn.release();
                 if(error){return res.status(500).send({ error:error})}   
                 const response = {
-                    mensagem: 'produto inserido com secesso',
+                    mensagem: 'empresa inserida com secesso',
                     produtoCriado: {
                         id: result.id,
                         nome: req.body.nome,
@@ -87,3 +87,34 @@ exports.getInsertEmpresas = (req,res,next)=> {
     });
 };
 
+// altera empresa
+exports.getAleterarEmpresas  = (req,res,next)=> {
+    mysql.getConnection((error,conn)=> {
+        conn.query(
+            `UPDATE empresas
+                SET nome = ?
+              WHERE id = ?`,
+             [
+                 req.body.nome,
+                 req.body.id
+             ],
+             (error)=> {
+                conn.release();
+                if(error){return res.status(500).send({ error:error})}
+                const response = {
+                    mensagem: 'empresa atualizado com secesso',
+                    produtoAtualizado: {
+                        id: req.body.id,
+                        nome: req.body.nome,
+                        request:{
+                            tipo: 'GET',
+                            descricao:'retorna todas as empresas',
+                            url:'http://localhost:3003/empresas/'
+                        }  
+                    }
+                }       
+                return res.status(202).send(response);
+            }
+        )
+    });
+};
