@@ -8,6 +8,7 @@ exports.getEmpresas = (req,res,next)=> {
             'SELECT * FROM empresas',
             (error,result)=>{
                 if(error){return res.status(500).send({ error:error})}
+                conn.release;
                 const response = {
                     id: result.lenght,
                     empresas: result.map(prod => {
@@ -35,6 +36,7 @@ exports.getEmpresasID = (req,res,next)=> {
         conn.query(
             'SELECT * FROM empresas WHERE id = ?;',[req.params.id],
             (error,result)=>{
+                conn.release;
                 if(error){return res.status(500).send({ error:error})}
                 if (result.length == 0) {
                     return res.status(404).send({
@@ -54,6 +56,34 @@ exports.getEmpresasID = (req,res,next)=> {
                 }
                 return res.status(201).send(response)    
             }
-        )        
+        );        
     }    
 )};
+
+//insere uma empresa
+exports.getInsertEmpresas = (req,res,next)=> {
+    mysql.getConnection((error,conn)=> {
+        if(error){return res.status(500).send({ error:error})}        
+        conn.query(
+            'INSERT INTO empresas (nome) VALUES (?)',[req.body.nome],
+            (error,result)=> {
+                conn.release();
+                if(error){return res.status(500).send({ error:error})}   
+                const response = {
+                    mensagem: 'produto inserido com secesso',
+                    produtoCriado: {
+                        id: result.id,
+                        nome: req.body.nome,
+                        request:{
+                            tipo: 'GET',
+                            descricao:'retorna todos as empresas',
+                            url:'http://localhost:3003/empresas'
+                        }  
+                    }
+                }       
+                return res.status(201).send(response);
+            }
+        );        
+    });
+};
+

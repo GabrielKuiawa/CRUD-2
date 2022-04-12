@@ -9,7 +9,9 @@ const empresasController = require('../controllers/empresa_controller');
 //retorna todas as empresas
 router.get('/',empresasController.getEmpresas);
 // retorna empresa com id 
-router.get('/:id',empresasController.getEmpresasID)
+router.get('/:id',empresasController.getEmpresasID);
+// insere uma empresa
+router.post('/',empresasController.getInsertEmpresas)
 
 
 module.exports = router;
