@@ -44,7 +44,7 @@ exports.getEmpresasID = (req,res,next)=> {
                     })
                 }
                 const response = {
-                    produtoCriado: {
+                    empresaCriada: {
                         id: result[0].id,
                         empresas: result[0].empresas,
                         request:{
@@ -71,7 +71,7 @@ exports.getInsertEmpresas = (req,res,next)=> {
                 if(error){return res.status(500).send({ error:error})}   
                 const response = {
                     mensagem: 'empresa inserida com secesso',
-                    produtoCriado: {
+                    empresaCriada: {
                         id: result.id,
                         nome: req.body.nome,
                         request:{
@@ -103,7 +103,7 @@ exports.getAleterarEmpresas  = (req,res,next)=> {
                 if(error){return res.status(500).send({ error:error})}
                 const response = {
                     mensagem: 'empresa atualizado com secesso',
-                    produtoAtualizado: {
+                    empresaAtualizada: {
                         id: req.body.id,
                         nome: req.body.nome,
                         request:{
@@ -118,3 +118,26 @@ exports.getAleterarEmpresas  = (req,res,next)=> {
         )
     });
 };
+
+//deleta empresa
+exports.getDeletaEmpresa = (req,res,next)=> {
+    mysql.getConnection((error,conn)=>{
+        if(error){return res.status(500).send({ error:error})}        
+        conn.query(
+            `DELETE FROM empresas WHERE id = ?`,[req.body.id],                                          
+            (error)=> {
+                conn.release();
+                if(error){return res.status(500).send({ error:error})}    
+                const response ={
+                    mensagem : 'empresa removida',
+                    request:{
+                        tipo:'GET',
+                        descricao: 'retorna empresas',
+                        url:'http://localhost:3003/empresas',
+                    }
+                }    
+                return res.status(202).send(response);
+            }
+        )
+    });    
+}

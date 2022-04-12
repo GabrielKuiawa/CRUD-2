@@ -1,2 +1,1 @@
-SELECT * FROM empresas;
-
+DELETE FROM empresas WHERE id = 8;
