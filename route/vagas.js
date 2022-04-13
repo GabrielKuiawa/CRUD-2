@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require("../msql").pool;
 
+//variavel que recebe o controller vagas
+const vagasController = require('../controllers/vagas.controller');
 
-router.get('/',)
+// rortas CRUD: GET,GETid,POST,PATCH,DELETE da tabela vagas_empresa
 
-module.exports = router
+//retorna todas as vagas
+router.get('/',vagasController.getVagas);
+
+module.exports = router;

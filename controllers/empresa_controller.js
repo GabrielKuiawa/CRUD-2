@@ -11,14 +11,14 @@ exports.getEmpresas = (req,res,next)=> {
                 conn.release;
                 const response = {
                     id: result.lenght,
-                    empresas: result.map(prod => {
+                    empresas: result.map(emp => {
                         return{
-                            id: prod.id,
-                            empresas: prod.nome, 
+                            id: emp.id,
+                            empresas: emp.nome, 
                             request:{
                                 tipo: 'GET',
                                 descricao:'retorna id da empresa',
-                                url:'http://localhost:3003/empresas/'+ prod.id
+                                url:'http://localhost:3003/empresas/'+ emp.id
                             }                     
                         }
                     })
