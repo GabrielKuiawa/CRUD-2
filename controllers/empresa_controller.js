@@ -3,7 +3,7 @@ const mysql = require("../msql").pool;
 //retorna empresas
 exports.getEmpresas = (req,res,next)=> {
     mysql.getConnection((error,conn)=> {
-        if(error){return res.status(500).send({ error:error})}
+        if(error){return res.status(500).send({ error:error})};
         conn.query(
             'SELECT * FROM empresas',
             (error,result)=>{
@@ -32,7 +32,7 @@ exports.getEmpresas = (req,res,next)=> {
 //retorna empresa com id
 exports.getEmpresasID = (req,res,next)=> {
     mysql.getConnection((error,conn)=>{
-        if(error){return res.status(500).send({ error:error})}        
+        if(error){return res.status(500).send({ error:error})};        
         conn.query(
             'SELECT * FROM empresas WHERE id = ?;',[req.params.id],
             (error,result)=>{
@@ -63,7 +63,7 @@ exports.getEmpresasID = (req,res,next)=> {
 //insere uma empresa
 exports.getInsertEmpresas = (req,res,next)=> {
     mysql.getConnection((error,conn)=> {
-        if(error){return res.status(500).send({ error:error})}        
+        if(error){return res.status(500).send({ error:error})};        
         conn.query(
             'INSERT INTO empresas (nome) VALUES (?)',[req.body.nome],
             (error,result)=> {
@@ -90,44 +90,60 @@ exports.getInsertEmpresas = (req,res,next)=> {
 // altera empresa
 exports.getAleterarEmpresas  = (req,res,next)=> {
     mysql.getConnection((error,conn)=> {
-        conn.query(
+        if(error){return res.status(500).send({ error:error})};
+        conn.query('SELECT * FROM empresas WHERE id = ?;',[req.body.id],
+        (error,result)=>{
+            conn.release();
+            if(error){return res.status(500).send({ error:error})}
+            if (result.length == 0) {
+                return res.status(404).send({
+                    message: 'Não foi encontrado empresa com este ID'
+                });
+            };
+            conn.query(
             `UPDATE empresas
                 SET nome = ?
-              WHERE id = ?`,
-             [
-                 req.body.nome,
-                 req.body.id
-             ],
-             (error)=> {
-                conn.release();
-                if(error){return res.status(500).send({ error:error})}
-                const response = {
-                    mensagem: 'empresa atualizado com secesso',
-                    empresaAtualizada: {
-                        id: req.body.id,
-                        nome: req.body.nome,
-                        request:{
-                            tipo: 'GET',
-                            descricao:'retorna todas as empresas',
-                            url:'http://localhost:3003/empresas/'
-                        }  
-                    }
-                }       
+                WHERE id = ?`,
+                [
+                    req.body.nome,
+                    req.body.id
+                ],
+                ()=> {
+                    const response = {
+                        mensagem: 'empresa atualizado com secesso',
+                        empresaAtualizada: {
+                            id: req.body.id,
+                            nome: req.body.nome,
+                            request:{
+                                tipo: 'GET',
+                                descricao:'retorna todas as empresas',
+                                url:'http://localhost:3003/empresas/'
+                            }  
+                        }
+                    }       
                 return res.status(202).send(response);
-            }
-        )
-    });
+                }
+            );
+        });
+    });  
 };
 
 //deleta empresa
 exports.getDeletaEmpresa = (req,res,next)=> {
     mysql.getConnection((error,conn)=>{
-        if(error){return res.status(500).send({ error:error})}        
-        conn.query(
-            `DELETE FROM empresas WHERE id = ?`,[req.body.id],                                          
-            (error)=> {
-                conn.release();
-                if(error){return res.status(500).send({ error:error})}    
+        if(error){return res.status(500).send({ error:error})};
+        conn.query('SELECT * FROM empresas WHERE id = ?;',[req.body.id],
+        (error,result)=>{
+            conn.release();
+            if(error){return res.status(500).send({ error:error})}
+            if (result.length == 0) {
+                return res.status(404).send({
+                    message: 'Não foi encontrado empresa com este ID'
+                });
+            };
+            conn.query(
+                `DELETE FROM empresas WHERE id = ?`,[req.body.id],                                          
+                (error)=> {   
                 const response ={
                     mensagem : 'empresa removida',
                     request:{
@@ -135,9 +151,10 @@ exports.getDeletaEmpresa = (req,res,next)=> {
                         descricao: 'retorna empresas',
                         url:'http://localhost:3003/empresas',
                     }
+                    
                 }    
                 return res.status(202).send(response);
-            }
-        )
-    });    
-}
+            });
+        });   
+    });   
+};

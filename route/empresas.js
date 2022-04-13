@@ -15,6 +15,6 @@ router.post('/',empresasController.getInsertEmpresas);
 // altera empresa
 router.patch('/',empresasController.getAleterarEmpresas);
 //deleta todas as empresas
-router.delete('/',empresasController.getDeletaEmpresa)
+router.delete('/',empresasController.getDeletaEmpresa);
 
 module.exports = router;
