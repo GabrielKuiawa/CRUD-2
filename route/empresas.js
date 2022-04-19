@@ -11,10 +11,10 @@ router.get('/',empresasController.getEmpresas);
 // retorna empresa com id 
 router.get('/:id',empresasController.getEmpresasID);
 // insere uma empresa
-router.post('/',empresasController.getInsertEmpresas);
+router.post('/',empresasController.insertEmpresas);
 // altera empresa
-router.patch('/',empresasController.getAleterarEmpresas);
+router.patch('/',empresasController.aleterarEmpresas);
 //deleta todas as empresas
-router.delete('/',empresasController.getDeletaEmpresa);
+router.delete('/',empresasController.deletaEmpresa);
 
 module.exports = router;

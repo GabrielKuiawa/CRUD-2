@@ -25,7 +25,7 @@ exports.getEmpresas = async(req,res,next)=> {
 };
 
 
-//retorna empresa com id
+    //retorna empresa com id
 exports.getEmpresasID = async(req,res,next)=> {
     try {
         const query = 'SELECT * FROM empresas WHERE id = ?;';
@@ -37,7 +37,7 @@ exports.getEmpresasID = async(req,res,next)=> {
             })
         };
         const response = {
-            empresaCriada: {
+            EmpresaId: {
                 id: result[0].id,
                 empresas: result[0].empresas,
                 request:{
@@ -54,7 +54,7 @@ exports.getEmpresasID = async(req,res,next)=> {
 };
 
 //insere uma empresa
-exports.getInsertEmpresas = async(req,res,next)=> {
+exports.insertEmpresas = async(req,res,next)=> {
     try {
         const query = 'INSERT INTO empresas (nome) VALUES (?)';
         const result = mysql.execute(query,[req.body.nome]);   
@@ -71,14 +71,13 @@ exports.getInsertEmpresas = async(req,res,next)=> {
             }
         }       
         return res.status(201).send(response);
-
     } catch (error) {
         return res.status(500).send({ error:error});                
     };
 };
 
 // altera empresa
-exports.getAleterarEmpresas  = async(req,res,next)=> {
+exports.aleterarEmpresas  = async(req,res,next)=> {
     try {
         const result = await mysql.execute("SELECT * FROM empresas WHERE id = ?;",[req.body.id]);
         if (result.length == 0) {
@@ -98,26 +97,24 @@ exports.getAleterarEmpresas  = async(req,res,next)=> {
             const response = {
                 mensagem: 'empresa atualizado com secesso',
                 empresaAtualizada: {
-                id: req.body.id,
-                nome: req.body.nome,
-                request:{
-                    tipo: 'GET',
-                    descricao:'retorna todas as empresas',
-                    url:'http://localhost:3003/empresas/'
-                }  
+                    id: req.body.id,
+                    nome: req.body.nome,
+                    request:{
+                        tipo: 'GET',
+                        descricao:'retorna as empresa com id',
+                        url:'http://localhost:3003/empresas/' + req.body.id
+                    }  
                 }
             }       
             return res.status(202).send(response);
-
-        };
-          
+        };  
     } catch (error) {
         return res.status(500).send({ error:error});                        
     };
 };
 
 //deleta empresa
-exports.getDeletaEmpresa = async(req,res,next)=> {
+exports.deletaEmpresa = async(req,res,next)=> {
     try {
         const result = await mysql.execute("SELECT * FROM empresas WHERE id = ?;",[req.body.id]);
         if (result.length == 0) {
