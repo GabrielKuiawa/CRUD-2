@@ -57,16 +57,16 @@ exports.getEmpresasID = async(req,res,next)=> {
 exports.insertEmpresas = async(req,res,next)=> {
     try {
         const query = 'INSERT INTO empresas (nome) VALUES (?)';
-        const result = mysql.execute(query,[req.body.nome]);   
+        const result = await mysql.execute(query,[req.body.nome]);   
         const response = {
             mensagem: 'empresa inserida com secesso',
             empresaCriada: {
-                id: result.insertID,
+                id: result.insertId,
                 nome: req.body.nome,
                 request:{
                     tipo: 'GET',
-                    descricao:'retorna todos as empresas',
-                    url:'http://localhost:3003/empresas' 
+                    descricao:'retorna empresa com o id',
+                    url:'http://localhost:3003/empresas/' + result.insertId
                 }  
             }
         }       

@@ -2,9 +2,9 @@ const { query } = require('express');
 const mysql = require('mysql');
 
 const pool = mysql.createPool({
-    "connectionLimit":100,
-    "user":"gabriel2",
-    "password": "admin",
+    "connectionLimit":1000,
+    "user":"gabriel",
+    "password": "user123",
     "database": "vagas",
     "host": "localhost",
     "port": 3306

@@ -63,30 +63,35 @@ exports.getVagasId = async(req,res,next)=> {
 //insere uma vaga 
 exports.insereVaga = async(req,res,next)=> {
     try {
-        const query = 'INSERT INTO vagas_emprego (titulo,salario,descricao,empresa_id) VALUES (?,?,?,?);';
-        const result = mysql.execute(query,
-            [
-            req.body.titulo,
-            req.body.salario,
-            req.body.descricao,
-            req.body.empresa_id
-            ]);   
-        const response = {
-            mensagem: 'vaga inserida com secesso',
-            empresaCriada: {
-                id: result.insertID,
-                titulo: req.body.titulo,
-                salario:req.body.salario,
-                descricao:req.body.descricao,
-                empresa:req.body.empresa_id,
-                request:{
-                    tipo: 'GET',
-                    descricao:'retorna todos as vagas',
-                    url:'http://localhost:3003/vagas' 
-                }  
-            }
-        }       
-        return res.status(201).send(response);
+        const result = await mysql.execute("SELECT * FROM empresas WHERE id = ?;",[req.body.id]);
+        if (result.length == 0) {
+            res.status(404).send({
+                message: 'Não foi encontrado vaga com este ID'
+            });
+        }else{
+            const query = 'INSERT INTO vagas_emprego (titulo,salario,descricao) VALUES (?,?,?);';
+            const result = await mysql.execute(query,
+                [
+                req.body.titulo,
+                req.body.salario,
+                req.body.descricao
+                ]);   
+                const response = {
+                    mensagem: 'vaga inserida com secesso',
+                    empresaCriada: {
+                        id: result.insertId,
+                        titulo: req.body.titulo,
+                        salario:req.body.salario,
+                        descricao:req.body.descricao,
+                        request:{
+                            tipo: 'GET',
+                            descricao:'retorna vaga com id',
+                            url:'http://localhost:3003/vagas/' + result.insertId 
+                        }  
+                }
+            }       
+            return res.status(201).send(response);
+        }
     } catch (error) {
         return res.status(500).send({ error:error});                
     };
