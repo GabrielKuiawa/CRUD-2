@@ -5,14 +5,19 @@ const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 
+//recebe as rotas
 const routerEmpresas = require('./route/empresas');
 const routerVagas = require('./route/vagas');
+const routerUsuarios = require('./route/usuarios');
+
 
 app.use(morgan('dev'));
 
 //essas são as rotas
 app.use('/empresas',routerEmpresas);
 app.use('/vagas',routerVagas);
+app.use('/usuarios',routerUsuarios);
+
 
 
 
