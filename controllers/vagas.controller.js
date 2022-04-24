@@ -133,7 +133,7 @@ exports.alteraVaga = async(req,res,next)=> {
                         url:'http://localhost:3003/vagas/'+ req.body.id
                     }  
                 }
-            }       
+            }; 
             return res.status(202).send(response);
         };  
     } catch (error) {
