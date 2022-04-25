@@ -27,10 +27,10 @@ exports.criaUsuario = async(req,res,next)=> {
                 }
             }       
         return res.status(201).send(response);
-        }
+        };
     } catch (error) {
         return res.status(500).send({ error: error });
-    }
+    };
 };
 
 // retorna todos os usuarios
@@ -51,11 +51,11 @@ exports.getUsuarios = async(req,res)=> {
                     }                     
                 }
             })
-        }
+        };
         return res.status(200).send(response);        
     } catch (error) {
         return res.status(500).send({ error:error});                
-    }
+    };
 };
 // retorna usuario pelo email
 exports.usuarioEmail = async(req,res)=> {
@@ -98,8 +98,8 @@ exports.alteraUsuario = async(req,res)=> {
             const hash = await bcrypt.hashSync(req.body.senha, 10);
             const query = 
                 `UPDATE usuarios
-                    SET senha = ?, 
-                        nome = ?
+                    SET nome = ?, 
+                        senha = ?
                 WHERE email = ?;`;
             await mysql.execute(query,
             [
@@ -124,7 +124,7 @@ exports.alteraUsuario = async(req,res)=> {
         };        
     } catch (error) {
         return res.status(500).send({ error:error});                                
-    }
+    };
 };
 
 //deleta usuario
@@ -146,12 +146,12 @@ exports.deletaUsuario = async(req,res)=> {
                     url:'http://localhost:3003/usuarios/',
                 }
                 
-            }    
+            }; 
             return res.status(202).send(response);    
-        } 
+        };
     } catch (error) {
         return res.status(500).send({ error:error});                                
-    }
+    };
 };
 
 // login usuario
@@ -161,22 +161,27 @@ exports.loginUsuario = async(req,res)=> {
         var results = await mysql.execute(query, [req.body.email]);
 
         if (results.length < 1) {
-            return res.status(401).send({ message: 'Falha na autenticação' })
+            return res.status(401).send({ message: 'Falha1 na autenticação' })
         }
-
-        if (await bcrypt.compareSync(req.body.senha, results[0].senha)) {
+        console.log(req.body.senha)
+        console.log(results[0])
+        if (bcrypt.compareSync(req.body.senha, results[0].senha)) {
+            console.log( process.env)
             const token = jwt.sign({
-                email: results[0].email,
-
+                email: results[0].email
+            },
+            "segredo",
+            {
+                expiresIn: "1h"
             });
             return res.status(200).send({
                 message: 'Autenticado com sucesso',
                 token: token
             });
-        }
-        return res.status(401).send({ message: 'Falha na autenticação' })
-
+        };
+        return res.status(401).send({ message: 'Falha2 na autenticação' })
     } catch (error) {
+        console.log(error)
         return res.status(500).send({ message: 'Falha na autenticação' });
-    }
+    };
 };

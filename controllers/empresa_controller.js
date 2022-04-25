@@ -1,5 +1,6 @@
 const mysql = require("../msql");
 
+
 //retorna empresas
 exports.getEmpresas = async(req,res,next)=> {
     try {
