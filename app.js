@@ -9,6 +9,7 @@ app.use(bodyParser.json());
 const routerEmpresas = require('./route/empresas');
 const routerVagas = require('./route/vagas');
 const routerUsuarios = require('./route/usuarios');
+const routerCandidatar = require('./route/candidatar');
 
 
 app.use(morgan('dev'));
@@ -17,6 +18,7 @@ app.use(morgan('dev'));
 app.use('/empresas',routerEmpresas);
 app.use('/vagas',routerVagas);
 app.use('/usuarios',routerUsuarios);
+app.use('/candidatar',routerCandidatar)
 
 
 
