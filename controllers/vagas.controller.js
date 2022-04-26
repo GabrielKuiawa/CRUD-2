@@ -63,15 +63,16 @@ exports.getVagasId = async(req,res,next)=> {
 //insere uma vaga 
 exports.insereVaga = async(req,res,next)=> {
     try {
-        const result = await mysql.execute("SELECT * FROM empresas WHERE id = ?;",[req.body.id]);
+        const result = await mysql.execute("SELECT * FROM empresas WHERE id = ?;",[req.body.id_empresas]);
         if (result.length == 0) {
             res.status(404).send({
-                message: 'Não foi encontrado vaga com este ID'
+                message: 'Não foi encontrado empresa com este ID'
             });
         }else{
-            const query = 'INSERT INTO vagas_emprego (titulo,salario,descricao) VALUES (?,?,?);';
+            const query = 'INSERT INTO vagas_emprego (empresa_id,titulo,salario,descricao) VALUES (?,?,?,?);';
             const result = await mysql.execute(query,
                 [
+                req.body.id_empresas,
                 req.body.titulo,
                 req.body.salario,
                 req.body.descricao
@@ -83,6 +84,7 @@ exports.insereVaga = async(req,res,next)=> {
                         titulo: req.body.titulo,
                         salario:req.body.salario,
                         descricao:req.body.descricao,
+                        idEmpresas:req.body.id_empresas,
                         request:{
                             tipo: 'GET',
                             descricao:'retorna vaga com id',

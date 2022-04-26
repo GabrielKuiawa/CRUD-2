@@ -4,6 +4,19 @@ const mysql = require("../msql");
 //validar vagas,usuario,candidatura
 exports.postaCandidatura = async(req,res)=> {
     try {
+        const queryVagas = 'SELECT * FROM vagas_emprego WHERE id = ?;'
+        const queryUsuario = 'SELECT * FROM usuarios WHERE email = ?;'
+        const queryCandidatura = 'SELECT * FROM candidatar WHERE id_vaga = ?;'
+        console.log(queryVagas.length)
+        if(queryVagas.length == 0){
+            return res.status(404).send({mensagem:"não existe esta vaga"})
+        };
+        if(queryUsuario.length == 0){
+            return res.status(404).send({mensagem:"não existe esta empresa"})
+        };
+        if(queryCandidatura.length > 0){
+            return res.status(404).send({mensagem:"já existe esta candidatura"})
+        };
         const query = 'INSERT INTO candidatar (id_vaga,id_usuario) VALUES (?,?)';
         await mysql.execute(query,[req.body.id_vaga,req.body.id_usuario]);   
         const response = {

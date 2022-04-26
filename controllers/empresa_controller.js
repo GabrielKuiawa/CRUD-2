@@ -57,6 +57,12 @@ exports.getEmpresasID = async(req,res,next)=> {
 //insere uma empresa
 exports.insertEmpresas = async(req,res,next)=> {
     try {
+        const resultEmpresas = await mysql.execute("SELECT * FROM empresas WHERE nome = ?;",[req.body.nome]);
+        if (resultEmpresas.length > 0) {
+            return res.status(404).send({
+                message: 'já exite empresa com este ID'
+            })
+        }
         const query = 'INSERT INTO empresas (nome) VALUES (?)';
         const result = await mysql.execute(query,[req.body.nome]);   
         const response = {
