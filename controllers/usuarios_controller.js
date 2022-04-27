@@ -1,18 +1,22 @@
 const mysql = require("../msql");
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken')    
+const jwt = require('jsonwebtoken') 
+const multer = require('multer');
+
 
 // cria um usuario
 exports.criaUsuario = async(req,res,next)=> {
     try {
+        console.log(req.file.path)
+
         const result = await mysql.execute("SELECT * FROM usuarios WHERE email = ?;",[req.body.email]);
         if (result.length > 0) {
             return res.status(409).send({ message: 'Usuário já cadastrado' })
         }else{
             const hash = await bcrypt.hashSync(req.body.senha, 10);
 
-            const query = 'INSERT INTO usuarios (email,senha,nome) VALUES (?,?,?);';
-            await mysql.execute(query,[req.body.email,hash,req.body.nome]);   
+            const query = 'INSERT INTO usuarios (email,senha,nome,imagem) VALUES (?,?,?,?);';
+            await mysql.execute(query,[req.body.email,hash,req.body.nome,req.file.path]);   
             const response = {
                 mensagem: 'usuario inserido com secesso',
                 empresaCriada: {
