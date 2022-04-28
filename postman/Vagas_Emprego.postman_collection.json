@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "487d8702-ef0e-42e4-8bf1-c1cb90649fe1",
+		"name": "Vagas_Emprego",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "retorna todas as vagas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3003/vagas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"vagas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "retorna vagas id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3003/vagas/56",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"vagas",
+						"56"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "posta uma vaga",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_empresas\":\"37\",\n    \"titulo\":\"te\",\n    \"salario\":33,\n    \"descricao\":\"lol\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/vagas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"vagas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "altera vaga",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"titulo\":\"teste21\",\n    \"salario\":33,\n    \"descricao\":\"louuul\",\n    \"id\":\"6\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/vagas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"vagas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleta vagas",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":\"58\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/vagas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"vagas"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

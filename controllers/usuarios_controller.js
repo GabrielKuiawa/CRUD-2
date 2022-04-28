@@ -1,19 +1,16 @@
 const mysql = require("../msql");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken') 
-const multer = require('multer');
 
 
 // cria um usuario
 exports.criaUsuario = async(req,res,next)=> {
     try {
-        console.log(req.file.path)
-
         const result = await mysql.execute("SELECT * FROM usuarios WHERE email = ?;",[req.body.email]);
         if (result.length > 0) {
             return res.status(409).send({ message: 'Usuário já cadastrado' })
         }else{
-            const hash = await bcrypt.hashSync(req.body.senha, 10);
+            const hash =  bcrypt.hashSync(req.body.senha, 10);
 
             const query = 'INSERT INTO usuarios (email,senha,nome,imagem) VALUES (?,?,?,?);';
             await mysql.execute(query,[req.body.email,hash,req.body.nome,req.file.path]);   
@@ -23,6 +20,7 @@ exports.criaUsuario = async(req,res,next)=> {
                     email:req.body.email,
                     senha:req.body.senha,
                     nome:req.body.nome,
+                    imagem:'http://localhost:3003/'+req.file.path,
                     request:{
                         tipo: 'GET',
                         descricao:'retorna usuario com email',
@@ -41,12 +39,18 @@ exports.criaUsuario = async(req,res,next)=> {
 exports.getUsuarios = async(req,res)=> {
     try {
         const result = await mysql.execute("SELECT * FROM usuarios;");     
+        if (result.length == 0) {
+            return res.status(401).send({
+                message: 'Não foi encontrado usuario'
+            });
+        };
         const response = {
             id: result.lenght,
             usuarios: result.map(user => {
                 return{
                     email: user.email,
                     senha: user.senha,
+                    imagem:'http://localhost:3003/'+user.imagem,
                     nome:user.nome,
                     request:{
                         tipo: 'GET',
@@ -77,6 +81,7 @@ exports.usuarioEmail = async(req,res)=> {
                 email: result[0].email,
                 senha:result[0].senha,
                 nome:result[0].nome,
+                imagem:'http://localhost:3003/'+result[0].imagem,
                 request:{
                     tipo: 'GET',
                     descricao:'retorna um todos usuarios',
@@ -102,21 +107,24 @@ exports.alteraUsuario = async(req,res)=> {
             const hash = await bcrypt.hashSync(req.body.senha, 10);
             const query = 
                 `UPDATE usuarios
-                    SET nome = ?, 
-                        senha = ?
+                    SET nome   = ?, 
+                        senha  = ?,
+                        imagem = ? 
                 WHERE email = ?;`;
             await mysql.execute(query,
             [
             req.body.nome,
             hash,
             req.body.email,
+            req.file.path
             ]);
             const response = {
                 mensagem: 'usuario atualizado com secesso',
                 Atualizada: {
                     email:req.body.email,
                     senha:req.body.senha,
-                    nome:req.body.nome,
+                    nome:req.body.nome,               
+                    imagem:'http://localhost:3003/'+ req.file.path,                    
                     request:{
                         tipo: 'GET',
                         descricao:'retorna email do usuario',
@@ -165,7 +173,7 @@ exports.loginUsuario = async(req,res)=> {
         var results = await mysql.execute(query, [req.body.email]);
 
         if (results.length < 1) {
-            return res.status(401).send({ message: 'Falha1 na autenticação' })
+            return res.status(401).send({ message: 'Falha na autenticação' })
         }
         console.log(req.body.senha)
         console.log(results[0])
@@ -183,7 +191,7 @@ exports.loginUsuario = async(req,res)=> {
                 token: token
             });
         };
-        return res.status(401).send({ message: 'Falha2 na autenticação' })
+        return res.status(401).send({ message: 'Falha na autenticação' })
     } catch (error) {
         console.log(error)
         return res.status(500).send({ message: 'Falha na autenticação' });

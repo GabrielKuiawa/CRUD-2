@@ -5,6 +5,11 @@ const mysql = require("../msql");
 exports.getVagas = async(req,res,next)=> {
     try {
         const result = await mysql.execute("SELECT * FROM vagas_emprego;")
+        if (result.length == 0) {
+            return res.status(404).send({
+                message: 'Não foi encontrado vagas'
+            });
+        };
         const response = {
             id: result.lenght,
             vagas: result.map(vagas => {
@@ -66,7 +71,7 @@ exports.insereVaga = async(req,res,next)=> {
         const result = await mysql.execute("SELECT * FROM empresas WHERE id = ?;",[req.body.id_empresas]);
         if (result.length == 0) {
             res.status(404).send({
-                message: 'Não foi encontrado empresa com este ID'
+                message: 'empresa não encontrada'
             });
         }else{
             const query = 'INSERT INTO vagas_emprego (empresa_id,titulo,salario,descricao) VALUES (?,?,?,?);';
@@ -105,7 +110,7 @@ exports.alteraVaga = async(req,res,next)=> {
         const result = await mysql.execute("SELECT * FROM vagas_emprego WHERE id = ?;",[req.body.id]);
         if (result.length == 0) {
             res.status(404).send({
-                message: 'Não foi encontrado vaga com este ID'
+                message: 'Não foi encontrado vaga'
             });
         }else{
             const query = 
@@ -149,7 +154,7 @@ exports.deletaVaga = async(req,res,next)=> {
         const result = await mysql.execute("SELECT * FROM vagas_emprego WHERE id = ?;",[req.body.id]);
         if (result.length == 0) {
             res.status(404).send({
-                message: 'Não foi encontrado vaga com este ID'
+                message: 'Não foi encontrado vaga'
             });
         }else{
             const query = `DELETE FROM vagas_emprego WHERE id = ?;`;

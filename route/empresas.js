@@ -4,6 +4,8 @@ const login = require('../middleware/login');
 
 //variavel que recebe o controller empresa
 const empresasController = require('../controllers/empresa_controller');
+//variavel que recebe o controller imagem
+const imagem = require('../controllers/imagem_controller'); 
 
 // rortas CRUD: GET,GETid,POST,PATCH,DELETE da tabela empresas
 
@@ -13,9 +15,9 @@ router.get('/',login.login, empresasController.getEmpresas);
 // retorna empresa com id 
 router.get('/:id',empresasController.getEmpresasID);
 // insere uma empresa
-router.post('/',empresasController.insertEmpresas);
+router.post('/',imagem.upload.single('image'),empresasController.insertEmpresas);
 // altera empresa
-router.patch('/',empresasController.aleterarEmpresas);
+router.patch('/',imagem.upload.single('image'),empresasController.aleterarEmpresas);
 //deleta todas as empresas
 router.delete('/',empresasController.deletaEmpresa);
 

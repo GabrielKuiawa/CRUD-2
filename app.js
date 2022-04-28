@@ -15,6 +15,7 @@ const routerCandidatar = require('./route/candidatar');
 app.use(morgan('dev'));
 
 //essas são as rotas
+app.use('/uploads',express.static('uploads'));
 app.use('/empresas',routerEmpresas);
 app.use('/vagas',routerVagas);
 app.use('/usuarios',routerUsuarios);

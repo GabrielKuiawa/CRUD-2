@@ -5,12 +5,19 @@ const mysql = require("../msql");
 exports.getEmpresas = async(req,res,next)=> {
     try {
         const result = await mysql.execute("SELECT * FROM empresas;")
+        if (result.length == 0) {
+            return res.status(404).send({
+                message: 'Não foi encontrado empresa'
+            })
+        };
         const response = {
             id: result.lenght,
             empresas: result.map(emp => {
+                console.log(emp);
                 return{
                     id: emp.id,
                     empresas: emp.nome, 
+                    imagem:'http://localhost:3003/'+emp.imagem,
                     request:{
                         tipo: 'GET',
                         descricao:'retorna id da empresa',
@@ -25,8 +32,7 @@ exports.getEmpresas = async(req,res,next)=> {
     }
 };
 
-
-    //retorna empresa com id
+//retorna empresa com id
 exports.getEmpresasID = async(req,res,next)=> {
     try {
         const query = 'SELECT * FROM empresas WHERE id = ?;';
@@ -37,10 +43,12 @@ exports.getEmpresasID = async(req,res,next)=> {
                 message: 'Não foi encontrado empresa com este ID'
             })
         };
+        console.log(result);
         const response = {
             EmpresaId: {
                 id: result[0].id,
                 empresas: result[0].empresas,
+                imagem:'http://localhost:3003/'+result[0].imagem,
                 request:{
                     tipo: 'GET',
                     descricao:'retorna um todas empresas',
@@ -60,16 +68,17 @@ exports.insertEmpresas = async(req,res,next)=> {
         const resultEmpresas = await mysql.execute("SELECT * FROM empresas WHERE nome = ?;",[req.body.nome]);
         if (resultEmpresas.length > 0) {
             return res.status(404).send({
-                message: 'já exite empresa com este ID'
+                message: 'já exite essa empresa'
             })
         }
-        const query = 'INSERT INTO empresas (nome) VALUES (?)';
-        const result = await mysql.execute(query,[req.body.nome]);   
+        const query = 'INSERT INTO empresas (nome,imagem) VALUES (?,?)';
+        const result = await mysql.execute(query,[req.body.nome,req.file.path]);   
         const response = {
             mensagem: 'empresa inserida com secesso',
             empresaCriada: {
                 id: result.insertId,
                 nome: req.body.nome,
+                imagem:'http://localhost:3003/'+req.file.path,
                 request:{
                     tipo: 'GET',
                     descricao:'retorna empresa com o id',
@@ -79,6 +88,7 @@ exports.insertEmpresas = async(req,res,next)=> {
         }       
         return res.status(201).send(response);
     } catch (error) {
+        console.log(error);
         return res.status(500).send({ error:error});                
     };
 };
@@ -89,16 +99,18 @@ exports.aleterarEmpresas  = async(req,res,next)=> {
         const result = await mysql.execute("SELECT * FROM empresas WHERE id = ?;",[req.body.id]);
         if (result.length == 0) {
             res.status(404).send({
-                message: 'Não foi encontrado empresa com este ID'
+                message: 'Não foi encontrado empresa'
             });
         }else{
             const query = 
                 `UPDATE empresas
-                    SET nome = ?
+                    SET nome   = ?,
+                        imagem = ?
                 WHERE id = ?;`;
             await mysql.execute(query,
             [
             req.body.nome,
+            req.file.path,
             req.body.id            
             ]);
             const response = {
@@ -106,6 +118,7 @@ exports.aleterarEmpresas  = async(req,res,next)=> {
                 empresaAtualizada: {
                     id: req.body.id,
                     nome: req.body.nome,
+                    imagem:'http://localhost:3003/'+req.file.path,
                     request:{
                         tipo: 'GET',
                         descricao:'retorna as empresa com id',
@@ -126,7 +139,7 @@ exports.deletaEmpresa = async(req,res,next)=> {
         const result = await mysql.execute("SELECT * FROM empresas WHERE id = ?;",[req.body.id]);
         if (result.length == 0) {
             res.status(404).send({
-                message: 'Não foi encontrado empresa com este ID'
+                message: 'Não foi encontrado empresa '
             });
         }else{
             const query = `DELETE FROM empresas WHERE id = ?;`;

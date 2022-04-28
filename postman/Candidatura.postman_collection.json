@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "8ad62b1f-3e26-4319-9190-266f209e1b82",
+		"name": "Candidatura",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "retorna candidatura por vaga",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3003/candidatar/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"candidatar",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "retorna candidaura por usuario",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_usuario\":\"teste3@email\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/candidatar/buscar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"candidatar",
+						"buscar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleta candidatura",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_vaga\":\"7\",\n    \"id_usuario\":\"teste3@email\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/candidatar/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"candidatar",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "posta candidatura",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_vaga\":8,\n    \"id_usuario\":\"teste3@email\"\n  \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/candidatar/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"candidatar",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

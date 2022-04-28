@@ -9,17 +9,14 @@ exports.postaCandidatura = async(req,res)=> {
   
         const resultUsuario = await mysql.execute('SELECT * FROM usuarios WHERE email = ?;',
         [req.body.email]);
-
-        const resultCandidatura = await mysql.execute('SELECT * FROM candidatar WHERE id_vaga = ?;',
-        [req.body.id_vaga]);
-
-        if(resultVagas.length == 0 || resultUsuario.length == 0  || resultCandidatura.length > 0){
+   
+        const validadaCandidatura = await mysql.execute('SELECT * FROM candidatar WHERE id_vaga = ? and id_usuario = ? ;',[req.body.id_vaga,req.body.email])
+        
+        if(resultVagas.length == 0 || resultUsuario.length == 0 || validadaCandidatura.length > 0){
             return res.status(404).send({mensagem:"informação não encontrada ou errada"})
-        }else{        
+        
+        }else{   
             const query = 'INSERT INTO candidatar (id_vaga,id_usuario) VALUES (?,?)';
-            console.log(req.body.id_vaga)
-            console.log(req.body.email)
-
             await mysql.execute(query,[req.body.id_vaga,req.body.email]);   
             const response = {
                 mensagem: 'candidatura validada com secesso',
