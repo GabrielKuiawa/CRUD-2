@@ -73,6 +73,7 @@ exports.insertEmpresas = async(req,res,next)=> {
         }
         const query = 'INSERT INTO empresas (nome,imagem) VALUES (?,?)';
         const result = await mysql.execute(query,[req.body.nome,req.file.path]);   
+        console.log(result)
         const response = {
             mensagem: 'empresa inserida com secesso',
             empresaCriada: {
