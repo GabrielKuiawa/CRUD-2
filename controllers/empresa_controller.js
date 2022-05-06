@@ -16,7 +16,7 @@ exports.getEmpresas = async(req,res,next)=> {
                 console.log(emp);
                 return{
                     id: emp.id,
-                    empresas: emp.nome, 
+                    nome: emp.nome, 
                     imagem:'http://localhost:3003/'+emp.imagem,
                     request:{
                         tipo: 'GET',
