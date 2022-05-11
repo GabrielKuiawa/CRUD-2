@@ -175,10 +175,7 @@ exports.loginUsuario = async(req,res)=> {
         if (results.length < 1) {
             return res.status(401).send({ message: 'Falha na autenticação' })
         }
-        console.log(req.body.senha)
-        console.log(results[0])
         if (bcrypt.compareSync(req.body.senha, results[0].senha)) {
-            console.log( process.env)
             const token = jwt.sign({
                 email: results[0].email
             },
@@ -193,7 +190,6 @@ exports.loginUsuario = async(req,res)=> {
         };
         return res.status(401).send({ message: 'Falha na autenticação' })
     } catch (error) {
-        console.log(error)
         return res.status(500).send({ message: 'Falha na autenticação' });
     };
 };
