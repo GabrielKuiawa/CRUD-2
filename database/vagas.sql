@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Tempo de geração: 09/05/2022 às 16:31
+-- Tempo de geração: 13/05/2022 às 17:22
 -- Versão do servidor: 8.0.28-0ubuntu0.20.04.3
 -- Versão do PHP: 7.4.3
 
@@ -41,7 +41,9 @@ CREATE TABLE `candidatar` (
 
 CREATE TABLE `empresas` (
   `id` int NOT NULL,
-  `nome` varchar(100) DEFAULT NULL,
+  `cnpj` varchar(15) DEFAULT NULL,
+  `nome` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `senha` text NOT NULL,
   `imagem` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -49,22 +51,8 @@ CREATE TABLE `empresas` (
 -- Despejando dados para a tabela `empresas`
 --
 
-INSERT INTO `empresas` (`id`, `nome`, `imagem`) VALUES
-(54, 'teste2', NULL),
-(55, 'teste3', 'uploads/2022-04-29T16:22:17.253ZCaptura de tela de 2022-04-06 14-26-38.png'),
-(56, 'teste4', 'uploads/2022-04-29T16:27:42.410ZCaptura de tela de 2022-04-06 14-26-38.png'),
-(57, 'teste5', 'uploads/2022-05-04T18:01:36.122ZCaptura de tela de 2022-03-30 14-05-28.png'),
-(58, 'teste6', 'uploads/2022-05-04T18:04:18.237ZCaptura de tela de 2022-03-30 14-05-28.png'),
-(59, 'teste7', 'uploads/2022-05-04T18:05:58.817ZCaptura de tela de 2022-03-30 14-05-28.png'),
-(60, 'tttt', NULL),
-(61, 'teste8', 'uploads/2022-05-04T19:09:05.422ZCaptura de tela de 2022-03-30 14-05-28.png'),
-(62, 'teste9', 'uploads/2022-05-04T19:11:56.057ZCaptura de tela de 2022-03-30 14-05-28.png'),
-(63, 'teste10', NULL),
-(64, 'teste121', 'uploads/2022-05-04T19:23:03.119ZCaptura de tela de 2022-03-30 14-05-28.png'),
-(65, 'tttttttttttttttttttt', NULL),
-(66, 'teste12', 'uploads/2022-05-04T19:43:42.787ZCaptura de tela de 2022-03-30 14-05-28.png'),
-(67, 'teste13', 'uploads/2022-05-04T19:44:13.698ZCaptura de tela de 2022-03-30 14-05-28.png'),
-(68, 'teste14', 'uploads/2022-05-04T20:18:49.893ZCaptura de tela de 2022-03-30 14-05-28.png');
+INSERT INTO `empresas` (`id`, `cnpj`, `nome`, `senha`, `imagem`) VALUES
+(69, '111.222.333', 'teorema', '$2b$10$ryUt5JrniwdGTeFv0cLlIurEsJrBN/72MYxF.SgX6zcj.UYmFRfIG', NULL);
 
 -- --------------------------------------------------------
 
@@ -84,6 +72,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`email`, `senha`, `nome`, `imagem`) VALUES
+('alan@email.com', '$2b$10$cbOnFDeGTMemSgf5iyPAAueTP7jCVVBzPWeElobt.b77Nya1jjJyG', 'alan', 'uploads/2022-05-11T17:06:23.719ZCaptura de tela de 2022-03-30 14-05-28.png'),
 ('teste2@email', '$2b$10$hJ5vLrjBbkMoo2cbxcRJtuO9vGWJqgzsjSvLFsa/TpHHSnmFtDUzC', 'alan', 'uploads/2022-04-29T16:48:48.448ZCaptura de tela de 2022-04-06 14-26-38.png'),
 ('teste3@email', '$2b$10$D13R0YIYpe7CU.MKGsCQVu0W.PtYiVAfAJC9zspuyNCX61IM/1oQS', 'alan', 'uploads/2022-05-04T18:09:27.944ZCaptura de tela de 2022-03-30 14-05-28.png'),
 ('teste4@email', '$2b$10$NHMsUL4ArUI0Wqls8cGgt.qc8Bi6dFa2N21U5bi5ykHgrLoHjAVPa', 'alan', 'uploads/2022-05-04T18:09:49.514ZCaptura de tela de 2022-03-30 14-05-28.png');
@@ -95,24 +84,12 @@ INSERT INTO `usuarios` (`email`, `senha`, `nome`, `imagem`) VALUES
 --
 
 CREATE TABLE `vagas_emprego` (
-  `id` int NOT NULL,
+  `id_vag` int NOT NULL,
   `titulo` varchar(100) DEFAULT NULL,
   `salario` float DEFAULT NULL,
   `descricao` text,
   `empresa_id` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Despejando dados para a tabela `vagas_emprego`
---
-
-INSERT INTO `vagas_emprego` (`id`, `titulo`, `salario`, `descricao`, `empresa_id`) VALUES
-(69, 'procura-se densenvolvedor', 2, 'procura-se densenvolvedor java', 54),
-(70, 'procura-se densenvolvedor', 2, 'procura-se densenvolvedor java', 54),
-(71, 'procura-se densenvolvedor', 2, 'procura-se densenvolvedor java', 54),
-(72, 'procura-se densenvolvedor', 2, 'procura-se densenvolvedor java', 54),
-(73, 'procura-se densenvolvedor', 2, 'procura-se densenvolvedor java', 54),
-(74, 'procura-se densenvolvedor', 2, 'procura-se densenvolvedor java', 54);
 
 --
 -- Índices de tabelas apagadas
@@ -141,7 +118,7 @@ ALTER TABLE `usuarios`
 -- Índices de tabela `vagas_emprego`
 --
 ALTER TABLE `vagas_emprego`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`id_vag`),
   ADD KEY `vagas_emprego_FK` (`empresa_id`);
 
 --
@@ -152,13 +129,13 @@ ALTER TABLE `vagas_emprego`
 -- AUTO_INCREMENT de tabela `empresas`
 --
 ALTER TABLE `empresas`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT de tabela `vagas_emprego`
 --
 ALTER TABLE `vagas_emprego`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id_vag` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- Restrições para dumps de tabelas
@@ -169,7 +146,7 @@ ALTER TABLE `vagas_emprego`
 --
 ALTER TABLE `candidatar`
   ADD CONSTRAINT `FK_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`email`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `FK_vaga` FOREIGN KEY (`id_vaga`) REFERENCES `vagas_emprego` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_vaga` FOREIGN KEY (`id_vaga`) REFERENCES `vagas_emprego` (`id_vag`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para tabelas `vagas_emprego`
