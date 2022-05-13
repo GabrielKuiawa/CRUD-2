@@ -10,6 +10,8 @@ const vagasController = require('../controllers/vagas-controller');
 router.get('/',vagasController.getVagas);
 //retorna vagas com id
 router.get('/:id',vagasController.getVagasId);
+//vagas de uma empres
+router.get('/empresas/:id',vagasController.getVagasEmpresasID);
 //insere uma vaga
 router.post('/',vagasController.insereVaga);
 //altera uma vaga 

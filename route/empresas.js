@@ -20,5 +20,8 @@ router.post('/',imagem.upload.single('image'),empresasController.insertEmpresas)
 router.patch('/',imagem.upload.single('image'),empresasController.aleterarEmpresas);
 //deleta todas as empresas
 router.delete('/',empresasController.deletaEmpresa);
+//loga uma empresa
+router.post('/login',empresasController.loginEmpresa);
+
 
 module.exports = router;

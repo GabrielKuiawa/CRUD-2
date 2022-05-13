@@ -1,4 +1,7 @@
 const mysql = require("../msql");
+const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken') 
+
 
 
 //retorna empresas
@@ -10,6 +13,7 @@ exports.getEmpresas = async(req,res,next)=> {
                 message: 'Não foi encontrado empresa'
             })
         };
+    
         const response = {
             id: result.lenght,
             empresas: result.map(emp => {
@@ -71,15 +75,18 @@ exports.insertEmpresas = async(req,res,next)=> {
                 message: 'já exite essa empresa'
             })
         }
-        const query = 'INSERT INTO empresas (nome,imagem) VALUES (?,?)';
-        const result = await mysql.execute(query,[req.body.nome,req.file.path]);   
+        const hash =  bcrypt.hashSync(req.body.senha, 10);
+        const query = 'INSERT INTO empresas (cnpj,nome,senha) VALUES (?,?,?)';
+        const result = await mysql.execute(query,[req.body.cnpj,req.body.nome,hash]);   
         console.log(result)
         const response = {
             mensagem: 'empresa inserida com secesso',
             empresaCriada: {
                 id: result.insertId,
+                cnpj: req.body.cnpj,
                 nome: req.body.nome,
-                imagem:'http://localhost:3003/'+req.file.path,
+                nome: req.body.hash,
+                imagem:'http://localhost:3003/',
                 request:{
                     tipo: 'GET',
                     descricao:'retorna empresa com o id',
@@ -160,3 +167,29 @@ exports.deletaEmpresa = async(req,res,next)=> {
         return res.status(500).send({ error:error});                        
     };
 }
+exports.loginEmpresa = async(req,res)=> {
+    try {
+        const query = `SELECT * FROM empresas WHERE cnpj = ?`;
+        var results = await mysql.execute(query, [req.body.cnpj]);
+        console.log(req);
+        if (results.length < 1) {
+            return res.status(401).send({ message: 'Falha na autenticação' })
+        }
+        if (bcrypt.compareSync(req.body.senha, results[0].senha)) {
+            const token = jwt.sign({
+                cnpj: results[0].cnpj
+            },
+            "segredo",
+            {
+                expiresIn: "1h"
+            });
+            return res.status(200).send({
+                message: 'Autenticado com sucesso',
+                token: token
+            });
+        };
+        return res.status(401).send({ message: 'Falha na autenticação' })
+    } catch (error) {
+        return res.status(500).send({ message: 'Falha na autenticação' });
+    };
+};

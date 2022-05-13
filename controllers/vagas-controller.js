@@ -64,6 +64,41 @@ exports.getVagasId = async(req,res,next)=> {
         return res.status(500).send({ error:error});          
     };     
 };
+exports.getVagasEmpresasID = async(req,res,next)=> {
+    try {
+       
+        const query = `SELECT emp.id,
+                              emp.nome,
+                              vag.id_vag,
+                              vag.titulo
+                         FROM empresas as emp
+                   INNER JOIN vagas_emprego as vag
+                           ON emp.id = vag.empresa_id   
+                        WHERE emp.id = ?`;
+
+        const result = await mysql.execute(query,[req.params.id]);
+        
+        if (result.length == 0) {
+            return res.status(404).send({
+                message: 'Não foi encontrado empresa com este ID'
+            })
+        };
+        const response = {
+            EmpresaId: {
+                tudo:result,
+                imagem:'http://localhost:3003/'+result[0].imagem,
+                request:{
+                    tipo: 'GET',
+                    descricao:'retorna um todas empresas',
+                    url:'http://localhost:3003/empresas'
+                }  
+            }
+        };
+        return res.status(201).send(response);    
+    } catch (error) {
+        return res.status(500).send({ error:error});                
+    };
+};
 
 //insere uma vaga 
 exports.insereVaga = async(req,res,next)=> {
