@@ -173,7 +173,7 @@ exports.loginEmpresa = async(req,res)=> {
         var results = await mysql.execute(query, [req.body.cnpj]);
         console.log(req);
         if (results.length < 1) {
-            return res.status(401).send({ message: 'Falha na autenticação' })
+            return res.status(401).send({ message: 'Falha1 na autenticação' })
         }
         if (bcrypt.compareSync(req.body.senha, results[0].senha)) {
             const token = jwt.sign({
@@ -188,8 +188,8 @@ exports.loginEmpresa = async(req,res)=> {
                 token: token
             });
         };
-        return res.status(401).send({ message: 'Falha na autenticação' })
+        return res.status(401).send({ message: 'Falha2 na autenticação' })
     } catch (error) {
-        return res.status(500).send({ message: 'Falha na autenticação' });
+        return res.status(500).send({ message: 'Falha3 na autenticação' });
     };
 };

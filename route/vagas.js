@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const login = require('../middleware/login');
+
 
 //variavel que recebe o controller vagas
 const vagasController = require('../controllers/vagas-controller');
@@ -7,10 +9,10 @@ const vagasController = require('../controllers/vagas-controller');
 // rortas CRUD: GET,GETid,POST,PATCH,DELETE da tabela vagas_empresa
 
 //retorna todas as vagas
-router.get('/',vagasController.getVagas);
+router.get('/',login.login,vagasController.getVagas);
 //retorna vagas com id
 router.get('/:id',vagasController.getVagasId);
-//vagas de uma empres
+//vagas de uma empresa
 router.get('/empresas/:id',vagasController.getVagasEmpresasID);
 //insere uma vaga
 router.post('/',vagasController.insereVaga);

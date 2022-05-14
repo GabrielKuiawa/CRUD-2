@@ -64,6 +64,7 @@ exports.getVagasId = async(req,res,next)=> {
         return res.status(500).send({ error:error});          
     };     
 };
+//vagas por empresa
 exports.getVagasEmpresasID = async(req,res,next)=> {
     try {
        

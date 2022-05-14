@@ -11,7 +11,7 @@ const imagem = require('../controllers/imagem_controller');
 
 //precisa de um token esta rota
 //retorna todas as empresas
-router.get('/',login.login, empresasController.getEmpresas);
+router.get('/', empresasController.getEmpresas);
 // retorna empresa com id 
 router.get('/:id',empresasController.getEmpresasID);
 // insere uma empresa
