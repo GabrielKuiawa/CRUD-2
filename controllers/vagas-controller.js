@@ -6,7 +6,7 @@ exports.getVagas = async(req,res,next)=> {
     try {
         const result = await mysql.execute("SELECT * FROM vagas_emprego;")
         if (result.length == 0) {
-            return res.status(404).send({
+            return res.status(200).send({
                 message: 'Não foi encontrado vagas'
             });
         };
@@ -144,7 +144,7 @@ exports.insereVaga = async(req,res,next)=> {
 //altera uma vaga
 exports.alteraVaga = async(req,res,next)=> {
     try {
-        const result = await mysql.execute("SELECT * FROM vagas_emprego WHERE id = ?;",[req.body.id]);
+        const result = await mysql.execute("SELECT * FROM vagas_emprego WHERE id_vag = ?;",[req.body.id]);
         if (result.length == 0) {
             res.status(404).send({
                 message: 'Não foi encontrado vaga'
@@ -155,7 +155,7 @@ exports.alteraVaga = async(req,res,next)=> {
                     SET titulo = ?, 
                         salario = ?, 
                         descricao = ?
-                WHERE id = ?;`;
+                WHERE id_vag = ?;`;
             await mysql.execute(query,
             [
             req.body.titulo,
@@ -188,14 +188,14 @@ exports.alteraVaga = async(req,res,next)=> {
 //deleta vaga
 exports.deletaVaga = async(req,res,next)=> {
     try {
-        const result = await mysql.execute("SELECT * FROM vagas_emprego WHERE id = ?;",[req.body.id]);
+        const result = await mysql.execute("SELECT * FROM vagas_emprego WHERE id_vag = ?;",[req.params.id]);
         if (result.length == 0) {
             res.status(404).send({
                 message: 'Não foi encontrado vaga'
             });
         }else{
-            const query = `DELETE FROM vagas_emprego WHERE id = ?;`;
-            await mysql.execute(query,[req.body.id]);
+            const query = `DELETE FROM vagas_emprego WHERE id_vag = ?;`;
+            await mysql.execute(query,[req.params.id]);
             const response ={
                 mensagem : 'vaga removida',
                 request:{
@@ -208,6 +208,7 @@ exports.deletaVaga = async(req,res,next)=> {
             return res.status(202).send(response);    
         }       
     } catch (error) {
+        console.log(error);
         return res.status(500).send({ error:error});                        
     };
 };

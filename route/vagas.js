@@ -17,9 +17,9 @@ router.get('/empresas/:id',vagasController.getVagasEmpresasID);
 //insere uma vaga
 router.post('/',vagasController.insereVaga);
 //altera uma vaga 
-router.patch('/',vagasController.alteraVaga);
+router.patch('/:id',vagasController.alteraVaga);
 //deleta uma vaga
-router.delete('/',vagasController.deletaVaga);
+router.delete('/:id',vagasController.deletaVaga);
 
 
 module.exports = router;
