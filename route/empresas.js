@@ -15,7 +15,7 @@ router.get('/', empresasController.getEmpresas);
 // retorna empresa com id 
 router.get('/:id',empresasController.getEmpresasID);
 // insere uma empresa
-router.post('/',imagem.upload.single('image'),empresasController.insertEmpresas);
+router.post('/',empresasController.insertEmpresas);
 // altera empresa
 router.patch('/',imagem.upload.single('image'),empresasController.aleterarEmpresas);
 //deleta todas as empresas

@@ -69,7 +69,7 @@ exports.getEmpresasID = async(req,res,next)=> {
 //insere uma empresa
 exports.insertEmpresas = async(req,res,next)=> {
     try {
-        const resultEmpresas = await mysql.execute("SELECT * FROM empresas WHERE nome = ?;",[req.body.nome]);
+        const resultEmpresas = await mysql.execute("SELECT * FROM empresas WHERE cnpj = ?;",[req.body.cnpj]);
         if (resultEmpresas.length > 0) {
             return res.status(404).send({
                 message: 'já exite essa empresa'
@@ -173,7 +173,7 @@ exports.loginEmpresa = async(req,res)=> {
         var results = await mysql.execute(query, [req.body.cnpj]);
         console.log(req);
         if (results.length < 1) {
-            return res.status(401).send({ message: 'Falha1 na autenticação' })
+            return res.status(401).send({ message: 'Falha na autenticação' })
         }
         if (bcrypt.compareSync(req.body.senha, results[0].senha)) {
             const token = jwt.sign({
@@ -185,11 +185,12 @@ exports.loginEmpresa = async(req,res)=> {
             });
             return res.status(200).send({
                 message: 'Autenticado com sucesso',
-                token: token
+                id:results[0].id,
+                token: token,
             });
         };
-        return res.status(401).send({ message: 'Falha2 na autenticação' })
+        return res.status(401).send({ message: 'Falha na autenticação' })
     } catch (error) {
-        return res.status(500).send({ message: 'Falha3 na autenticação' });
+        return res.status(500).send({ message: 'Falha na autenticação' });
     };
 };

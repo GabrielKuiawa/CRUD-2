@@ -4,7 +4,7 @@ const mysql = require("../msql");
 //retorna vagas 
 exports.getVagas = async(req,res,next)=> {
     try {
-        const result = await mysql.execute("SELECT * FROM vagas_emprego;")
+        const result = await mysql.execute("SELECT * FROM vagas_emprego INNER JOIN empresas ;")
         if (result.length == 0) {
             return res.status(404).send({
                 message: 'Não foi encontrado vagas'
@@ -16,6 +16,7 @@ exports.getVagas = async(req,res,next)=> {
                 return{
                     id: vagas.id,
                     titulo: vagas.titulo,
+                    nome:vagas.nome,
                     salario:vagas.salario,
                     descricao:vagas.descricao,
                     empresa_id:vagas.empresa_id,
@@ -36,7 +37,7 @@ exports.getVagas = async(req,res,next)=> {
 //retorna vagas com id
 exports.getVagasId = async(req,res,next)=> {
     try {
-        const query = 'SELECT * FROM vagas_emprego WHERE id = ?;';
+        const query = 'SELECT * FROM vagas_emprego WHERE id_vag = ?;';
         const result = await mysql.execute(query,[req.params.id]);
         
         if (result.length == 0) {
@@ -46,7 +47,7 @@ exports.getVagasId = async(req,res,next)=> {
         };
         const response = {
             vagasId:{
-                id: result[0].id,
+                id: result[0].id_vag,
                 titulo:result[0].titulo,
                 salario:result[0].salario,
                 descricao:result[0].descricao,
@@ -104,7 +105,8 @@ exports.getVagasEmpresasID = async(req,res,next)=> {
 //insere uma vaga 
 exports.insereVaga = async(req,res,next)=> {
     try {
-        const result = await mysql.execute("SELECT * FROM empresas WHERE id = ?;",[req.body.id_empresas]);
+        const result = await mysql.execute("SELECT * FROM empresas WHERE id = ?;",[req.body.empresa_id]);
+        console.log(result);
         if (result.length == 0) {
             res.status(404).send({
                 message: 'empresa não encontrada'
@@ -113,7 +115,7 @@ exports.insereVaga = async(req,res,next)=> {
             const query = 'INSERT INTO vagas_emprego (empresa_id,titulo,salario,descricao) VALUES (?,?,?,?);';
             const result = await mysql.execute(query,
                 [
-                req.body.id_empresas,
+                req.body.empresa_id,
                 req.body.titulo,
                 req.body.salario,
                 req.body.descricao
@@ -125,7 +127,7 @@ exports.insereVaga = async(req,res,next)=> {
                         titulo: req.body.titulo,
                         salario:req.body.salario,
                         descricao:req.body.descricao,
-                        idEmpresas:req.body.id_empresas,
+                        idEmpresas:req.body.empresa_id,
                         request:{
                             tipo: 'GET',
                             descricao:'retorna vaga com id',

@@ -8,7 +8,7 @@ const usuariosController = require('../controllers/usuarios_controller');
 //variavel que recebe o controller imagem
 const imagem = require('../controllers/imagem_controller'); 
 // cria um usuario
-router.post('/cadastro',imagem.upload.single('image'),usuariosController.criaUsuario);
+router.post('/cadastro',usuariosController.criaUsuario);
 //retorna todos os usuarios
 router.get('/',usuariosController.getUsuarios);
 //retorna usuarios com email

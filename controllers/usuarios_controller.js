@@ -12,15 +12,15 @@ exports.criaUsuario = async(req,res,next)=> {
         }else{
             const hash =  bcrypt.hashSync(req.body.senha, 10);
 
-            const query = 'INSERT INTO usuarios (email,senha,nome,imagem) VALUES (?,?,?,?);';
-            await mysql.execute(query,[req.body.email,hash,req.body.nome,req.file.path]);   
+            const query = 'INSERT INTO usuarios (email,senha,nome) VALUES (?,?,?);';
+            await mysql.execute(query,[req.body.email,hash,req.body.nome]);   
             const response = {
                 mensagem: 'usuario inserido com secesso',
                 empresaCriada: {
                     email:req.body.email,
                     senha:req.body.senha,
                     nome:req.body.nome,
-                    imagem:'http://localhost:3003/'+req.file.path,
+                    imagem:'http://localhost:3003/',
                     request:{
                         tipo: 'GET',
                         descricao:'retorna usuario com email',
@@ -185,6 +185,7 @@ exports.loginUsuario = async(req,res)=> {
             });
             return res.status(200).send({
                 message: 'Autenticado com sucesso',
+                usuarioEmail:results[0].email,
                 token: token
             });
         };
