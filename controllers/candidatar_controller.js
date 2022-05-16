@@ -4,7 +4,7 @@ const mysql = require("../msql");
 //validar vagas,usuario,candidatura
 exports.postaCandidatura = async(req,res)=> {
     try {
-        const resultVagas = await mysql.execute('SELECT * FROM vagas_emprego WHERE id = ?;',
+        const resultVagas = await mysql.execute('SELECT * FROM vagas_emprego WHERE id_vag = ?;',
         [req.body.id_vaga]);
   
         const resultUsuario = await mysql.execute('SELECT * FROM usuarios WHERE email = ?;',

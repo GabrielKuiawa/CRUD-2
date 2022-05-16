@@ -4,7 +4,7 @@ const mysql = require("../msql");
 //retorna vagas 
 exports.getVagas = async(req,res,next)=> {
     try {
-        const result = await mysql.execute("SELECT * FROM vagas_emprego INNER JOIN empresas ;")
+        const result = await mysql.execute("SELECT * FROM vagas_emprego;")
         if (result.length == 0) {
             return res.status(404).send({
                 message: 'Não foi encontrado vagas'
@@ -14,9 +14,8 @@ exports.getVagas = async(req,res,next)=> {
             id: result.lenght,
             vagas: result.map(vagas => {
                 return{
-                    id: vagas.id,
+                    id_vag: vagas.id_vag,
                     titulo: vagas.titulo,
-                    nome:vagas.nome,
                     salario:vagas.salario,
                     descricao:vagas.descricao,
                     empresa_id:vagas.empresa_id,

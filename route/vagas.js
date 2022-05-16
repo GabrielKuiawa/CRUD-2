@@ -9,7 +9,7 @@ const vagasController = require('../controllers/vagas-controller');
 // rortas CRUD: GET,GETid,POST,PATCH,DELETE da tabela vagas_empresa
 
 //retorna todas as vagas
-router.get('/',login.login,vagasController.getVagas);
+router.get('/',vagasController.getVagas);
 //retorna vagas com id
 router.get('/:id',vagasController.getVagasId);
 //vagas de uma empresa
