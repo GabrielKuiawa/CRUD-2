@@ -81,7 +81,7 @@ exports.getVagasEmpresasID = async(req,res,next)=> {
         
         if (result.length == 0) {
             return res.status(404).send({
-                message: 'Não foi encontrado empresa com este ID'
+                message: 'Não foi encontrada vaga com este ID'
             })
         };
         const response = {
